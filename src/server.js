@@ -25,6 +25,7 @@ app.use((request, response, next) => {
 app.use(express.json());
 
 app.get("/alunos", alunosController.listarAlunos);
+app.get("/alunos/:id", alunosController.listarAlunoPorId);
 
 
 app.use((req, res, next) => {

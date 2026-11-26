@@ -11,3 +11,12 @@ export async function listarAlunos() {
 
   return rows;
 }
+
+export async function listarAlunoPorId(id) {
+  const { rows } = await db.query(`
+    SELECT * FROM alunos
+    WHERE id = $1
+  `, [id]);
+
+  return rows[0];
+}

@@ -8,3 +8,12 @@ export async function listarAlunos() {
 		throw new Error("Não foi possível listar os alunos");
 	}
 }
+
+export async function listarAlunoPorId(id) {
+	try {
+		const aluno = await alunosRepository.listarAlunoPorId(id);
+		return aluno;
+	} catch (error) {
+		throw new Error("Não foi possível listar o aluno por ID");
+	}
+}
