@@ -1,6 +1,6 @@
 import express from "express";
 import { fileURLToPath } from "node:url";
-import { autenticar } from "./middlewares/autenticar.js";
+import * as alunosController from "./controllers/alunosController.js";
 
 
 if (!process.env.JWT_SECRET) {
@@ -23,6 +23,8 @@ app.use((request, response, next) => {
   next();
 });
 app.use(express.json());
+
+app.get("/alunos", alunosController.listarAlunos);
 
 
 app.use((req, res, next) => {
