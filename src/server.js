@@ -2,6 +2,7 @@ import express from "express";
 import { fileURLToPath } from "node:url";
 import * as alunosController from "./controllers/alunosController.js";
 import * as planosController from "./controllers/planosController.js";
+import * as turmasController from "./controllers/turmasController.js";
 
 
 if (!process.env.JWT_SECRET) {
@@ -25,6 +26,7 @@ app.use((request, response, next) => {
 });
 app.use(express.json());
 
+app.get("/turmas", turmasController.listarTurmas);
 app.get("/planos", planosController.listarPlanos);
 app.get("/alunos", alunosController.listarAlunos);
 app.get("/alunos/:id", alunosController.listarAlunoPorId);
