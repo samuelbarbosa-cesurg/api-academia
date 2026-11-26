@@ -26,6 +26,7 @@ app.use(express.json());
 
 app.get("/alunos", alunosController.listarAlunos);
 app.get("/alunos/:id", alunosController.listarAlunoPorId);
+app.post("/alunos", alunosController.cadastrarAluno);
 
 
 app.use((req, res, next) => {
