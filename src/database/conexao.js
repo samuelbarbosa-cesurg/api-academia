@@ -1,16 +1,22 @@
-// Abre o banco SQLite e executa o script inicial das tabelas.
-// O arquivo banco.db é criado automaticamente dentro de data/.
-import { DatabaseSync } from "node:sqlite";
-import fs from "node:fs";
-import path from "node:path";
+// Abre a conexão com o banco PostgreSQL do Supabase.
+// A URL de conexão vem da variável DATABASE_URL, definida no .env.
+import pg from "pg";
 
-const pastaDados = path.join(process.cwd(), "data");
-const caminhoBanco = path.join(pastaDados, "banco.db");
-const caminhoScript = path.join(pastaDados, "banco.sql");
+const { DATABASE_URL } = process.env;
 
-fs.mkdirSync(pastaDados, { recursive: true });
+if (!DATABASE_URL) {
+  throw new Error("Defina a variável DATABASE_URL no arquivo .env");
+}
 
-const db = new DatabaseSync(caminhoBanco);
-db.exec(fs.readFileSync(caminhoScript, "utf-8"));
+const db = new pg.Pool({
+  connectionString: DATABASE_URL,
+  // O Supabase usa conexão criptografada com certificado próprio.
+  ssl: { rejectUnauthorized: false },
+});
+
+// Evita que a API caia se uma conexão parada no pool for encerrada.
+db.on("error", (erro) => {
+  console.error("Erro na conexão com o banco:", erro.message);
+});
 
 export default db;
