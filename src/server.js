@@ -23,6 +23,7 @@ app.use(express.json());
 
 app.get("/turmas", turmasController.listarTurmas);
 app.post("/turmas/:id/inscricoes", turmasController.inscreverAluno);
+app.delete("/turmas/:id/inscricoes/:alunoId", turmasController.cancelarInscricao);
 app.get("/planos", planosController.listarPlanos);
 app.get("/alunos", alunosController.listarAlunos);
 app.get("/alunos/:id", alunosController.listarAlunoPorId);

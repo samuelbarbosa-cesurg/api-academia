@@ -65,3 +65,39 @@ export async function inscreverAluno(request, response) {
     });
   }
 }
+
+export async function cancelarInscricao(request, response) {
+  try {
+    const { id, alunoId } = request.params;
+    const inscricaoCancelada = await turmasLogic.cancelarInscricao(id, alunoId);
+
+    if (!inscricaoCancelada) {
+      return response.status(404).json({ erro: "Inscrição não encontrada" });
+    }
+
+    return response.status(200).json({ mensagem: "Inscrição cancelada com sucesso" });
+  } catch (error) {
+    console.error(`Erro ao cancelar inscrição: ${error.message}`);
+    if (error instanceof ErroValidacao) {
+      return response.status(400).json({
+        erro: error.message,
+      });
+    }
+
+    if (error instanceof ErroNaoEncontrado) {
+      return response.status(404).json({
+        erro: error.message,
+      });
+    }
+
+    if (error instanceof ErroBanco) {
+      return response.status(error.status).json({
+        erro: error.message,
+      });
+    }
+
+    return response.status(500).json({
+      erro: "Erro interno do servidor",
+    });
+  }
+}

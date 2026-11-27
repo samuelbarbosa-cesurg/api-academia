@@ -58,3 +58,21 @@ export async function inscreverAluno(inscricao) {
     traduzirErroDoBanco(error);
   }
 }
+
+// Exclui a inscrição e retorna o registro excluído.
+export async function cancelarInscricao(inscricao) {
+  try {
+    const { rows } = await db.query(`
+      DELETE FROM inscricoes
+      WHERE turma_id = $1 AND aluno_id = $2
+      RETURNING *
+    `, [
+      inscricao.turma_id,
+      inscricao.aluno_id,
+    ]);
+
+    return rows[0];
+  } catch (error) {
+    traduzirErroDoBanco(error);
+  }
+}

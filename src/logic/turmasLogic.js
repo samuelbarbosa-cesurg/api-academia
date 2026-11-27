@@ -60,3 +60,31 @@ export async function inscreverAluno(turmaId, dados) {
 		throw new Error("Não foi possível inscrever o aluno");
 	}
 }
+
+export async function cancelarInscricao(turmaId, alunoId) {
+	try {
+		const inscricao = new Inscricao({
+			turma_id: Number(turmaId),
+			aluno_id: Number(alunoId),
+		});
+
+		const turma = await turmasRepository.buscarTurmaPorId(inscricao.turma_id);
+		if (!turma) {
+			throw new ErroNaoEncontrado("Turma não encontrada");
+		}
+
+		const aluno = await alunosRepository.listarAlunoPorId(inscricao.aluno_id);
+		if (!aluno) {
+			throw new ErroNaoEncontrado("Aluno não encontrado");
+		}
+
+		return await turmasRepository.cancelarInscricao(inscricao);
+	} catch (error) {
+		if (error instanceof ErroValidacao || error instanceof ErroNaoEncontrado || error instanceof ErroBanco) {
+			throw error;
+		}
+
+		console.error("Falha em cancelarInscricao:", error);
+		throw new Error("Não foi possível cancelar a inscrição");
+	}
+}
