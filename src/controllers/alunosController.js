@@ -100,6 +100,12 @@ export async function atualizarAluno(request, response) {
       });
     }
 
+    if (error instanceof ErroConflito) {
+      return response.status(409).json({
+        erro: error.message,
+      });
+    }
+
     if (error instanceof ErroBanco) {
       return response.status(error.status).json({
         erro: error.message,

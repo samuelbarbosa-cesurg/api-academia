@@ -52,53 +52,34 @@ export async function atualizarAluno(id, dados) {
 	try {
 		const alunoExistente = await alunosRepository.listarAlunoPorId(id);
 		if (!alunoExistente) {
-			throw new ErroValidacao("Aluno não encontrado");
-		}
-
-		if (typeof dados.email === "string" && dados.email && dados.email !== alunoExistente.email) {
-			const emailExistente = await alunosRepository.buscarAlunoPorEmail(dados.email);
-			if (emailExistente && emailExistente.id !== id) {
-				throw new ErroConflito("Já existe um aluno cadastrado com este e-mail");
-			}
-		}
-
-		if (typeof dados.cpf === "string" && dados.cpf && dados.cpf !== alunoExistente.cpf) {
-			const cpfExistente = await alunosRepository.buscarAlunoPorCpf(dados.cpf);
-			if (cpfExistente && cpfExistente.id !== id) {
-				throw new ErroConflito("Já existe um aluno cadastrado com este CPF");
-			}
-
-			if(dados.cpf.length !== 11) {
-				throw new ErroValidacao("O CPF deve ter 11 dígitos");
-			}
-		}
-
-		if (typeof dados.nome === "string" && dados.nome.trim() === "") {
-			throw new ErroValidacao("O nome não pode ser vazio");
+			return null;
 		}
 
 		const formatarData = (valor) => valor instanceof Date ? valor.toISOString().slice(0, 10) : valor;
 
 		const alunoAtualizado = new Aluno({
-			...alunoExistente,
+			nome: dados.nome ?? alunoExistente.nome,
+			cpf: dados.cpf ?? alunoExistente.cpf,
+			email: dados.email ?? alunoExistente.email,
 			data_nascimento: formatarData(alunoExistente.data_nascimento),
+			plano_id: alunoExistente.plano_id,
 			inicio_plano: formatarData(alunoExistente.inicio_plano),
+			ativo: dados.ativo ?? alunoExistente.ativo,
 		});
 
-		if (typeof dados.nome === "string" && dados.nome) {
-			alunoAtualizado.nome = dados.nome;
+		if (alunoAtualizado.email !== alunoExistente.email) {
+			if (await alunosRepository.buscarAlunoPorEmail(alunoAtualizado.email)) {
+				throw new ErroConflito("Já existe um aluno cadastrado com este e-mail");
+			}
 		}
 
-		if (typeof dados.cpf === "string" && dados.cpf) {
-			alunoAtualizado.cpf = dados.cpf;
-		}
-
-		if (typeof dados.email === "string" && dados.email) {
-			alunoAtualizado.email = dados.email;
+		if (alunoAtualizado.cpf !== alunoExistente.cpf) {
+			if (await alunosRepository.buscarAlunoPorCpf(alunoAtualizado.cpf)) {
+				throw new ErroConflito("Já existe um aluno cadastrado com este CPF");
+			}
 		}
 
 		return await alunosRepository.atualizarAluno(id, alunoAtualizado);
-
 	} catch (error) {
 		if (error instanceof ErroValidacao || error instanceof ErroConflito || error instanceof ErroBanco) {
 			throw error;
