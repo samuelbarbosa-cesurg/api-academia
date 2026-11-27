@@ -72,3 +72,27 @@ export async function cadastrarAluno(aluno) {
     traduzirErroDoBanco(error);
   }
 }
+
+export async function atualizarAluno(id, aluno) {
+  try {
+    const { rows } = await db.query(`
+      UPDATE alunos
+      SET nome = $1, cpf = $2, email = $3, data_nascimento = $4, plano_id = $5, inicio_plano = $6, ativo = $7
+      WHERE id = $8
+      RETURNING *
+    `, [
+      aluno.nome,
+      aluno.cpf,
+      aluno.email,
+      aluno.data_nascimento,
+      aluno.plano_id,
+      aluno.inicio_plano,
+      aluno.ativo,
+      id
+    ]);
+
+    return rows[0];
+  } catch (error) {
+    traduzirErroDoBanco(error);
+  }
+}

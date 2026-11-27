@@ -81,3 +81,33 @@ export async function cadastrarAluno(request, response) {
     });
   }
 }
+
+export async function atualizarAluno(request, response) {
+  try {
+    const { id } = request.params;
+    const alunoAtualizado = await alunosLogic.atualizarAluno(id, request.body ?? {});
+
+    if (!alunoAtualizado) {
+      return response.status(404).json({ erro: "Aluno não encontrado" });
+    }
+
+    return response.status(200).json(alunoAtualizado);
+  } catch (error) {
+    console.error(`Erro ao atualizar aluno: ${error.message}`);
+    if (error instanceof ErroValidacao) {
+      return response.status(400).json({
+        erro: error.message,
+      });
+    }
+
+    if (error instanceof ErroBanco) {
+      return response.status(error.status).json({
+        erro: error.message,
+      });
+    }
+
+    return response.status(500).json({
+      erro: "Erro interno do servidor",
+    });
+  }
+}

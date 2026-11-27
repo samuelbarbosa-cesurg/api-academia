@@ -29,6 +29,7 @@ app.get("/planos", planosController.listarPlanos);
 app.get("/alunos", alunosController.listarAlunos);
 app.get("/alunos/:id", alunosController.listarAlunoPorId);
 app.post("/alunos", alunosController.cadastrarAluno);
+app.patch("/alunos/:id", alunosController.atualizarAluno);
 
 
 app.use((req, res, next) => {
