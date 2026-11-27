@@ -1,4 +1,10 @@
-# API ACADEMIA
+## Integrantes
+- Matheus Silvestri
+- Samuel Barbosa
+- Vitor Hugo
+
+## Tema
+API Academia
 
 ## Rotas
 
