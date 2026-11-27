@@ -22,6 +22,7 @@ app.use((request, response, next) => {
 app.use(express.json());
 
 app.get("/turmas", turmasController.listarTurmas);
+app.post("/turmas/:id/inscricoes", turmasController.inscreverAluno);
 app.get("/planos", planosController.listarPlanos);
 app.get("/alunos", alunosController.listarAlunos);
 app.get("/alunos/:id", alunosController.listarAlunoPorId);
