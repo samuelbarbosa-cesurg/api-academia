@@ -19,7 +19,7 @@ export function traduzirErroDoBanco(erro) {
   if (!status) throw erro; // erro inesperado: vira 500
 
   throw new ErroBanco(
-    `O banco recusou a operação (${erro.constraint ?? erro.column}).`,
+    `O banco recusou a operação.`,
     status,
   );
 }

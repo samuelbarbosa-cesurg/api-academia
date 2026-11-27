@@ -111,3 +111,27 @@ export async function atualizarAluno(request, response) {
     });
   }
 }
+
+export async function excluirAluno(request, response) {
+  try {
+    const { id } = request.params;
+    const alunoExcluido = await alunosLogic.excluirAluno(id);
+
+    if (!alunoExcluido) {
+      return response.status(404).json({ erro: "Aluno não encontrado" });
+    }
+
+    return response.status(200).json({ mensagem: "Aluno excluído com sucesso" });
+  } catch (error) {
+    console.error(`Erro ao excluir aluno: ${error.message}`);
+    if (error instanceof ErroBanco) {
+      return response.status(error.status).json({
+        erro: error.message,
+      });
+    }
+
+    return response.status(500).json({
+      erro: "Erro interno do servidor",
+    });
+  }
+}

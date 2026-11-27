@@ -96,3 +96,17 @@ export async function atualizarAluno(id, aluno) {
     traduzirErroDoBanco(error);
   }
 }
+
+export async function excluirAluno(id) {
+  try {
+    const { rows } = await db.query(`
+      DELETE FROM alunos
+      WHERE id = $1
+      RETURNING *
+    `, [id]);
+
+    return rows[0];
+  } catch (error) {
+    traduzirErroDoBanco(error);
+  }
+}

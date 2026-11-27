@@ -5,11 +5,6 @@ import * as planosController from "./controllers/planosController.js";
 import * as turmasController from "./controllers/turmasController.js";
 
 
-if (!process.env.JWT_SECRET) {
-  console.error("Falta o JWT_SECRET no arquivo .env");
-  process.exit(1);
-}
-
 const app = express();
 app.use("/app", express.static("public"));
 
@@ -32,6 +27,7 @@ app.get("/alunos", alunosController.listarAlunos);
 app.get("/alunos/:id", alunosController.listarAlunoPorId);
 app.post("/alunos", alunosController.cadastrarAluno);
 app.patch("/alunos/:id", alunosController.atualizarAluno);
+app.delete("/alunos/:id", alunosController.excluirAluno);
 
 
 app.use((req, res, next) => {

@@ -40,16 +40,10 @@ export async function cadastrarAluno(dados) {
 
 		return await alunosRepository.cadastrarAluno(aluno);
 	} catch (error) {
-		// Erros esperados seguem como estão para o controller.
-		if (
-			error instanceof ErroValidacao ||
-			error instanceof ErroConflito ||
-			error instanceof ErroBanco
-		) {
+		if (error instanceof ErroValidacao || error instanceof ErroConflito || error instanceof ErroBanco) {
 			throw error;
 		}
 
-		console.error("Falha em cadastrarAluno:", error);
 		throw new Error("Não foi possível cadastrar o aluno");
 	}
 }
@@ -112,5 +106,17 @@ export async function atualizarAluno(id, dados) {
 
 		console.error("Falha em atualizarAluno:", error);
 		throw new Error("Não foi possível atualizar o aluno");
+	}
+}
+
+export async function excluirAluno(id) {
+	try {
+		return await alunosRepository.excluirAluno(id);
+	} catch (error) {
+		if (error instanceof ErroBanco) {
+			throw error;
+		}
+
+		throw new Error("Não foi possível excluir o aluno");
 	}
 }
