@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import * as alunosController from "./controllers/alunosController.js";
 import * as planosController from "./controllers/planosController.js";
 import * as turmasController from "./controllers/turmasController.js";
+import * as pagamentosController from "./controllers/pagamentosController.js";
 
 
 const app = express();
@@ -30,6 +31,10 @@ app.get("/alunos/:id", alunosController.listarAlunoPorId);
 app.post("/alunos", alunosController.cadastrarAluno);
 app.patch("/alunos/:id", alunosController.atualizarAluno);
 app.delete("/alunos/:id", alunosController.excluirAluno);
+app.patch("/pagamentos/:id/pagar", pagamentosController.pagarPagamento);
+
+// Não estava pedindo mas a gente criou para ter a listagem de pagamentos
+app.get("/pagamentos", pagamentosController.listarPagamentos);
 
 
 app.use((req, res, next) => {
