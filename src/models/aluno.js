@@ -2,8 +2,8 @@ import { ErroValidacao } from "./erroValidacao.js";
 
 export class Aluno {
   constructor({ nome, cpf, email, data_nascimento, plano_id, inicio_plano, ativo = true }) {
-    if (typeof nome !== "string" || nome.trim().length < 2) {
-      throw new ErroValidacao("O nome deve ter pelo menos 2 caracteres");
+    if (typeof nome !== "string" || nome.trim().length < 2 || nome.trim().length > 100) {
+      throw new ErroValidacao("O nome deve ter entre 2 e 100 caracteres");
     }
     if (typeof cpf !== "string" || cpf.trim().length !== 11 || !somenteNumeros(cpf.trim())) {
       throw new ErroValidacao("O CPF deve ter 11 números, sem pontos e traço");
